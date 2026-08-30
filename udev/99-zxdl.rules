@@ -1,0 +1,14 @@
+# ZTE ZX297520 in TBootPro download mode.
+# Install:  sudo cp 99-zxdl.rules /etc/udev/rules.d/
+#           sudo udevadm control --reload-rules && sudo udevadm trigger
+#
+# Grants group access so zxdl does not need root, and tells ModemManager to
+# keep its hands off the port while flashing.
+
+SUBSYSTEM=="tty", ATTRS{idVendor}=="19d2", ATTRS{idProduct}=="0256", \
+    MODE="0660", GROUP="dialout", TAG+="uaccess", \
+    ENV{ID_MM_DEVICE_IGNORE}="1", ENV{ID_MM_PORT_IGNORE}="1"
+
+# Raw USB node, for tools that bypass the tty layer.
+SUBSYSTEM=="usb", ATTR{idVendor}=="19d2", ATTR{idProduct}=="0256", \
+    MODE="0660", GROUP="dialout", TAG+="uaccess"
